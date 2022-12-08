@@ -5,9 +5,9 @@ namespace Database\Factories;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\User>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Expert>
  */
-class UserFactory extends Factory
+class ExpertFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -23,6 +23,11 @@ class UserFactory extends Factory
             'photo'=>fake()->filePath(),
             'phone'=>fake()->phoneNumber(),
             'wallet'=>fake()->randomNumber(4),
+            'address'=>fake()->address(),
+            'rate'=> 4,
+            'rate_count'=>fake()->randomNumber(4),
+            'cost'=>fake()->randomNumber(4),
+            'duration'=>fake()->randomNumber(2)
         ];
     }
 }
