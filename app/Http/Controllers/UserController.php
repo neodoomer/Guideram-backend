@@ -26,7 +26,7 @@ class UserController extends Controller
                 'email'=>'required|email|unique:users,email',
                 'photo'=>'image|mimes:jpg,png,jpeg,svg|max:2048',
                 'isExpert'=>'boolean',
-                'password'=>'required',
+                'password'=>'required'
             ]
         );
         if($validateUser->fails()){

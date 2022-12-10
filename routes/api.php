@@ -26,5 +26,7 @@ Route::post('/user/register',[UserController::class,'create']);
 Route::post('/expert/register',[ExpertController::class,'create']);
 
 Route::post('/user/login',[UserController::class,'login']);
-Route::post('/user/logout', [UserController::class, 'logout'])
-    ->middleware('auth:sanctum');
+
+Route::get('/experts/{type}',[ExpertController::class,'typedExperts']);
+
+Route::get('/expert/{id}',[ExpertController::class,'get']);
