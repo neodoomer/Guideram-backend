@@ -14,13 +14,9 @@ return new class extends Migration
     public function up()
     {
         Schema::create('experts', function (Blueprint $table) {
-            $table->id('expert_id');
-            $table->string('email',255)->unique();
-            $table->string('password',255);
-            $table->string('name',255);
-            $table->string('photo',255)->nullable();
+            $table->unsignedBigInteger('expert_id');
+            $table->foreign('expert_id')->references('user_id')->on('users');
             $table->string('phone',55);
-            $table->float('wallet',8,2,true)->default(0);
             $table->string('address',255);
             $table->float('rate')->default(0.0);
             $table->integer('rate_count',false,true)->default(0);
