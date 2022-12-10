@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class ExpertConsultationType extends Model
 {
     use HasFactory;
-    protected $primeryKey=['expert_id','consultation_type_id'];
+    protected $primaryKey=['expert_id','consultation_type_id'];
     public function expert()
     {
         return $this->belongsTo(Expert::class);

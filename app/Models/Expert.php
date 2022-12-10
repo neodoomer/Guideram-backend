@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Expert extends Model
 {
     use HasFactory;
-    protected $primeryKey='expert_id';
+    protected $primaryKey='expert_id';
     public function user()
     {
         return $this->belongsTo(User::class);

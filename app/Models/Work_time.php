@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Work_time extends Model
 {
     use HasFactory;
-    protected $primeryKey='work_time_id';
+    protected $primaryKey='work_time_id';
     public function expert()
     {
         return $this->belongsTo(Expert::class);

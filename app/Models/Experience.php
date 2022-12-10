@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Experience extends Model
 {
     use HasFactory;
-    protected $primeryKey = 'experience_id';
+    protected $primaryKey = 'experience_id';
     public function expert()
     {
         return $this->belongsTo(Expert::class);

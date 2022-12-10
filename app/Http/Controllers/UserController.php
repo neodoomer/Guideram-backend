@@ -56,27 +56,29 @@ class UserController extends Controller
 
 }
 
-//not working for now to mohamad
 
-// public function login(Request $request)
-// {
-//     $user = User::where('email', $request->email)->first();
+    public function login(Request $request)
+    {
+        $user = User::where('email', $request->email)->first();
 
-//     if (! $user || ! Hash::check($request->password, $user->password)) {
-//         return response()->json([
-//             'status'=> false,
-//             'message'=>'error in credintails provided',
+        if (! $user || ! Hash::check($request->password, $user->password)) {
+            return response()->json([
+                'status'=> false,
+                'message'=>'error in credintails provided',
 
-//         ],401);
-//     }
+            ],401);
+        }
 
-//     return response()->json([
-//         'status'=> true,
-//         'message'=>'User login successfully.',
-//         'token'=>$user->createToken('api')->plainTextToken
-//     ],200);
-// }
-
+        return response()->json([
+            'status'=> true,
+            'message'=>'User login successfully.',
+            'token'=>$user->createToken('API TOKEN')->plainTextToken
+        ],200);
+    }
+    public function logout()
+    {
+        # code...
+    }
 
 
 
