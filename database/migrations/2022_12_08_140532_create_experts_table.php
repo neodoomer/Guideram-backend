@@ -22,7 +22,6 @@ return new class extends Migration
             $table->integer('rate_count',false,true)->default(0);
             $table->float('cost',8,2,true)->nullable();
             $table->integer('duration',false,true)->nullable();
-            $table->timestamps();
         });
     }
 

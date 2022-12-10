@@ -3,8 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Expert;
-use App\Http\Requests\StoreExpertRequest;
-use App\Http\Requests\UpdateExpertRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
@@ -45,9 +43,8 @@ class ExpertController extends Controller
         'is_expert'=> $request->is_expert,
 
     ]);
-
     $expert=Expert::create([
-        'expert_id'=>$user->id,
+        'expert_id'=>$user->user_id,
         "phone"=>$request->phone,
         "address"=>$request->address,
     ]);
