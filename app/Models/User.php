@@ -29,6 +29,10 @@ class User extends Authenticatable
     }
 
     //configes
-    protected $fillable=['name','email','password','photo'];
+    protected $fillable=['name','email','password','photo','is_expert'];
     public $timestamps=false;
+    protected $hidden = [
+        'password',
+        'remember_token',
+    ];
 }
