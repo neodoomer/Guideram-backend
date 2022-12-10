@@ -28,3 +28,5 @@ Route::post('/expert/register',[ExpertController::class,'create']);
 Route::post('/user/login',[UserController::class,'login']);
 
 Route::get('/experts/{type}',[ExpertController::class,'typedExperts']);
+
+Route::get('/expert/{id}',[ExpertController::class,'get']);

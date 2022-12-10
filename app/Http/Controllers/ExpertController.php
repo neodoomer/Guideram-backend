@@ -72,4 +72,12 @@ class ExpertController extends Controller
         ->select('experts.expert_id','name','rate','rate_count','photo','address','cost','duration')->where('type','=',request()->type)
         ->get();
     }
+    public function get()
+    {
+        return DB::table('experts')
+        ->join('users','user_id','=','expert_id')
+        ->select('name','photo','email','experts.*')
+        ->where('user_id' , '=' ,request()->id)
+        ->get();
+    }
 }
