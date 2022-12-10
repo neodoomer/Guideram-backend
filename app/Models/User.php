@@ -9,6 +9,10 @@ class User extends Model
 {
     use HasFactory;
     protected $primeryKey='user_id';
+    public function expert()
+    {
+        return $this->hasOne(Expert::class);
+    }
     public function consultation()
     {
         return $this->hasMany(Consultation::class);
