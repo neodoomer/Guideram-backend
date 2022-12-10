@@ -69,14 +69,14 @@ class ExpertController extends Controller
         ->join('experts', 'experts.expert_id', '=', 'expert_consultation_types.expert_id')
         ->join('users', 'users.user_id', '=', 'experts.expert_id')
         ->join('consultation_types', 'consultation_types.consultation_type_id', '=', 'expert_consultation_types.consultation_type_id')
-        ->select('experts.expert_id','name','rate','rate_count','photo','address','cost','duration')->where('type','=',request()->type)
+        ->select('users.*','experts.*')->where('type','=',request()->type)
         ->get();
     }
     public function get()
     {
         return DB::table('experts')
         ->join('users','user_id','=','expert_id')
-        ->select('name','photo','email','experts.*')
+        ->select('users.*','experts.*')
         ->where('user_id' , '=' ,request()->id)
         ->get();
     }
