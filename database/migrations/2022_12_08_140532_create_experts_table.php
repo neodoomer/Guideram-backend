@@ -20,8 +20,8 @@ return new class extends Migration
             $table->string('address',255);
             $table->float('rate')->default(0.0);
             $table->integer('rate_count',false,true)->default(0);
-            $table->float('cost',8,2,true);
-            $table->integer('duration',false,true);
+            $table->float('cost',8,2,true)->nullable();
+            $table->integer('duration',false,true)->nullable();
             $table->timestamps();
         });
     }

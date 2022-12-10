@@ -37,4 +37,6 @@ class Expert extends Model
     {
         return $this->hasMany(ExpertConsultationType::class);
     }
+    protected $fillable=['expert_id','phone','address'];
+    public $timestamps=false;
 }

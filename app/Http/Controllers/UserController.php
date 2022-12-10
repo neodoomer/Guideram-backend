@@ -1,130 +1,83 @@
 <?php
 
 namespace App\Http\Controllers;
-
 use App\Models\User;
+use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
-use App\Http\Requests\StoreUserRequest;
-use App\Http\Requests\UpdateUserRequest;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator ;
+use Throwable;
 
 use function Symfony\Component\String\b;
 
 class UserController extends Controller
 {
-    public function login()
+    /**
+     * create User
+     * @param Request $request
+     * @return  User
+     */
+    public function create(Request $request)
     {
-        $formField=request()->validate([
-            'email'=>'required|email|unique:users',
-            'password'=>'required|confirmed|min:6'
-        ]);
-        if(auth()->attempt($formField))
-        {
-            request()->session()->regenerate();
-
-            return redirect('/home')->with('message','successfully logged in');
+            //validation
+            $validateUser=Validator::make($request->all(),
+            [
+                'name'=>'required',
+                'email'=>'required|email|unique:users,email',
+                'photo'=>'image|mimes:jpg,png,jpeg,svg|max:2048',
+                'isExpert'=>'boolean',
+                'password'=>'required',
+            ]
+        );
+        if($validateUser->fails()){
+            return response()->json([
+                'status'=> false,
+                'message'=>'validation erorr',
+                'errors'=>$validateUser->errors()
+            ],401);
         }
-        return back()->withErrors(['email'=>'invalid credentials'])->onlyInput('email');
-    }
-    public function register()
-    {
-        $formField=request()->validate([
-            'is_expert' => 'required',
-            'email'=>'required|email|unique:users',
-            'password'=>'required|confirmed|min:6',
-            'name'=>'required'
+        //check if there is a photo
+        $photoPath=$request->file('photo')?$request->file('photo')->store('public/images'):null;
+        //creating user if succssed
+        $user=User::create([
+            'name'=>$request->name,
+            'email'=>$request->email,
+            'photo'=>$photoPath,
+            'password'=>Hash::make($request->password),
+            'isExpert'=>$request->isExpert
         ]);
-        $formField['password']=bcrypt($formField['password']);
+        return response()->json([
+            'status'=> true,
+            'message'=>'user create successfully',
+            'token'=>$user->createToken("API TOKEN")->plainTextToken,
+            'user'=>$user,
+        ],200);
 
-        $user=User::create($formField);
 
-        auth()->login($user);
+}
 
-        return redirect('/home')->with('message' , 'user registered and logged in');
-        
-    }
-    public function logout()
-    {
-        auth()->logout();
+//not working for now to mohamad
 
-        request()->session()->invalidate();
-        request()->session()->regenerateToken();
+// public function login(Request $request)
+// {
+//     $user = User::where('email', $request->email)->first();
 
-        return redirect('/')->with('message','user logged out');
-        
-    }
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        //
-    }
+//     if (! $user || ! Hash::check($request->password, $user->password)) {
+//         return response()->json([
+//             'status'=> false,
+//             'message'=>'error in credintails provided',
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
+//         ],401);
+//     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \App\Http\Requests\StoreUserRequest  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(StoreUserRequest $request)
-    {
-        //
-    }
+//     return response()->json([
+//         'status'=> true,
+//         'message'=>'User login successfully.',
+//         'token'=>$user->createToken('api')->plainTextToken
+//     ],200);
+// }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\User  $user
-     * @return \Illuminate\Http\Response
-     */
-    public function show(User $user)
-    {
-        //
-    }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\User  $user
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(User $user)
-    {
-        //
-    }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \App\Http\Requests\UpdateUserRequest  $request
-     * @param  \App\Models\User  $user
-     * @return \Illuminate\Http\Response
-     */
-    public function update(UpdateUserRequest $request, User $user)
-    {
-        //
-    }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\User  $user
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(User $user)
-    {
-        //
-    }
 }

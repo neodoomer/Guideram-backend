@@ -4,13 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 
-class User extends Model
+class User extends Authenticatable
 {
-    use HasFactory,HasApiTokens,Notifiable;
-
+    use HasFactory,HasApiTokens;
     protected $primeryKey='user_id';
     public function expert()
     {
@@ -28,5 +27,12 @@ class User extends Model
     {
         return $this->hasMany(Favoriting::class);
     }
+
+    //configes
+    protected $fillable=['name','email','password','photo','is_expert'];
+    public $timestamps=false;
+    protected $hidden = [
+        'password',
+        'remember_token',
+    ];
 }
- 

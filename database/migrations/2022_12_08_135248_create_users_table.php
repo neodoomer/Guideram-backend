@@ -21,7 +21,6 @@ return new class extends Migration
             $table->string('name',255);
             $table->string('photo',255)->nullable();
             $table->float('wallet',8,2,true)->default(10000);
-            $table->timestamps();
         });
     }
 
