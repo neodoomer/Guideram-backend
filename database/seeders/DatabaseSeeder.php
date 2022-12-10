@@ -4,7 +4,10 @@ namespace Database\Seeders;
 
 use App\Models\User;
 use App\Models\Expert;
+use App\Models\Consultation;
 use Illuminate\Database\Seeder;
+use App\Models\Consultation_type;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
 class DatabaseSeeder extends Seeder
@@ -16,6 +19,20 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        
+        DB::table('consultation_types')->insert([
+            'type' => 'Medical'
+        ]);
+        DB::table('consultation_types')->insert([
+            'type' => 'Professional'
+        ]);
+        DB::table('consultation_types')->insert([
+            'type' => 'Psychological'
+        ]);
+        DB::table('consultation_types')->insert([
+            'type' => 'Familial'
+        ]);
+        DB::table('consultation_types')->insert([
+            'type' => 'Buisiness'
+        ]);
     }
 }

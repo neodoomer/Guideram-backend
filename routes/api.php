@@ -25,7 +25,6 @@ Route::post('/user/register',[UserController::class,'create']);
 
 Route::post('/expert/register',[ExpertController::class,'create']);
 
-//login must work for both to mohamd i am sorry for not doing it )':
 Route::post('/user/login',[UserController::class,'login']);
-Route::post('/user/logout', [UserController::class, 'logout'])
-    ->middleware('auth:sanctum');
+
+Route::get('/experts/{type}',[ExpertController::class,'typedExperts']);
