@@ -19,9 +19,7 @@ return new class extends Migration
             $table->string('password',255);
             $table->string('name',255);
             $table->string('photo',255)->nullable();
-            $table->string('phone',55);
             $table->float('wallet',8,2,true)->default(10000);
-            $table->timestamps();
         });
     }
 

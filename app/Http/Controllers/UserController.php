@@ -2,85 +2,100 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Expert;
 use App\Models\User;
-use App\Http\Requests\StoreUserRequest;
-use App\Http\Requests\UpdateUserRequest;
+use Illuminate\Http\Request;
+use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator ;
+use Throwable;
 
 class UserController extends Controller
 {
     /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
+     * create User
+     * @param Request $request
+     * @return  User
      */
-    public function index()
+    public function create(Request $request)
     {
-        //
-    }
+        try{
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
+            //validation
+            $validateUser=Validator::make($request->all(),
+            [
+                'name'=>'required',
+                'email'=>'required|email|unique:users,email',
+                'photo'=>'image|mimes:jpg,png,jpeg,svg|max:2048',
+                'password'=>'required'
+            ]
+        );
+        if($validateUser->fails()){
+            return response()->json([
+                'status'=> false,
+                'message'=>'validation erorr',
+                'errors'=>$validateUser->errors()
+            ],401);
+        }
+        //check if there is a photo
+        $photoPath=$request->file('photo')?$request->file('photo')->store('public/images'):null;
+        //creating user if succssed
+        $user=User::create([
+            'name'=>$request->name,
+            'email'=>$request->email,
+            'photo'=>$photoPath,
+            'password'=>Hash::make($request->password)
+        ]);
+        return response()->json([
+            'status'=> true,
+            'message'=>'user create successfully',
+            'token'=>$user->createToken("API TOKEN")->plainTextToken
+        ],200);
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \App\Http\Requests\StoreUserRequest  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(StoreUserRequest $request)
-    {
-        //
-    }
+        }catch(Throwable $th){
+            return response()->json([
+                'status'=> false,
+                'message'=>$th->getMessage(),
+            ],500);
+        }
+}
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\User  $user
-     * @return \Illuminate\Http\Response
-     */
-    public function show(User $user)
-    {
-        //
-    }
+//not working for now
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\User  $user
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(User $user)
-    {
-        //
-    }
+// public function login(Request $request)
+// {
+//     $request->validate([
+//         'email'=>'required|email',
+//         'password'=>'required'
+//     ]);
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \App\Http\Requests\UpdateUserRequest  $request
-     * @param  \App\Models\User  $user
-     * @return \Illuminate\Http\Response
-     */
-    public function update(UpdateUserRequest $request, User $user)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\User  $user
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(User $user)
-    {
-        //
-    }
+// //check user
+// $user=User::where("email",$request->email)->first();
+// if(!isset($user)){
+//     $user=Expert::where("email",$request->email)->first();
+// }
+// if(isset($user)){
+//     if(Hash::check($request->password,$user->password)){
+//       $userToken=$user->createToken("API TOKEN")->plainTextToken;
+// return response()->json([
+//         "status"=>1,
+//         "message"=>"user Logged In",
+//         'token'=>$userToken
+//     ],200);
+//     }
+//     else{
+//         return response()->json([
+//             "status"=>0,
+//             "message"=>"Password doesn't match"
+//         ],404);
+//     }
+// }
+// else{
+//     return response()->json([
+//         "status"=>0,
+//         "message"=>"user not found"
+//     ],404);
+// }
+// }
 }
