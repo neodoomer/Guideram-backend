@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Consultation_type;
 use Illuminate\Http\Request;
+use App\Models\Consultation_type;
+use Illuminate\Routing\Controller;
 
 class ConsultationTypeController extends Controller
 {

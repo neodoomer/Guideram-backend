@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Expert;
+use Illuminate\Routing\Controller;
 use App\Http\Requests\StoreExpertRequest;
 use App\Http\Requests\UpdateExpertRequest;
 

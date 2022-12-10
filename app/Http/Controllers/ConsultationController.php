@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Consultation;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Controller;
 
 class ConsultationController extends Controller
 {

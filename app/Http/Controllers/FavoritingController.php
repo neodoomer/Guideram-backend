@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Favoriting;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Controller;
 
 class FavoritingController extends Controller
 {
