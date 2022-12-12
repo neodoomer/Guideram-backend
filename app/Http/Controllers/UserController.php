@@ -77,7 +77,7 @@ class UserController extends Controller
     }
     public function logout()
     {
-        auth()->user()->tokken()->delete();
+        auth()->user()->tokens()->delete();
         return response()->json([
             "status"=>true,
             'message'=>"User Logedout successfully"
