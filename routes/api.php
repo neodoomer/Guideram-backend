@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Route;
 | Here is where you can register API routes for your application. These
 | routes are loaded by the RouteServiceProvider within a group which
 | is assigned the "api" middleware group. Enjoy building your API!
-|
+|gi
 */
 
 
@@ -27,6 +27,6 @@ Route::post('/expert/register',[ExpertController::class,'create']);
 
 Route::post('/user/login',[UserController::class,'login']);
 
-Route::get('/experts/{type}',[ExpertController::class,'typedExperts']);
+Route::get('/experts',[ExpertController::class,'index']);
 
-Route::get('/expert/{id}',[ExpertController::class,'get']);
+Route::get('/experts/{id}',[ExpertController::class,'get']);

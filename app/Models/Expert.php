@@ -38,4 +38,15 @@ class Expert extends Model
     }
     protected $fillable=['expert_id','phone','address'];
     public $timestamps=false;
+    public function scopeFilter($query,array $filters)
+    {
+        if($filters['type'] ?? false){
+            $query
+            ->join('users','user_id','=','expert_id')
+            ->join('expert_consultation_types','expert_consultation_types.expert_id','experts.expert_id')
+            ->join('consultation_types', 'consultation_types.consultation_type_id', '=', 'expert_consultation_types.consultation_type_id')
+            ->select('users.*','experts.*')
+            ->where('type','like',request('type'));
+        }
+    }
 }
