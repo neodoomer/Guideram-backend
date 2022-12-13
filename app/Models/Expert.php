@@ -10,7 +10,7 @@ class Expert extends Model
     protected $primaryKey='expert_id';
     public function user()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class );
     }
     public function consultation()
     {
@@ -36,7 +36,7 @@ class Expert extends Model
     {
         return $this->hasMany(ExpertConsultationType::class);
     }
-    protected $fillable=['expert_id','phone','address'];
+    protected $fillable=['expert_id','phone','address','cost','duration'];
     public $timestamps=false;
     public function scopeFilter($query,array $filters)
     {

@@ -1,18 +1,17 @@
 <?php
-
 namespace App\Http\Controllers;
-
 use App\Models\User;
 use App\Models\Expert;
+use App\Models\Work_time;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
-use PhpParser\Node\Expr\BinaryOp\Equal;
 use Illuminate\Support\Facades\Validator;
 
 class ExpertController extends Controller
 {
+
     public function create(Request $request)
     {
 
@@ -43,7 +42,6 @@ class ExpertController extends Controller
         'photo'=>$photoPath,
         'password'=>Hash::make($request->password),
         'is_expert'=> $request->is_expert,
-
     ]);
     $expert=Expert::create([
         'expert_id'=>$user->user_id,
@@ -54,12 +52,47 @@ class ExpertController extends Controller
         'status'=> true,
         'message'=>'Expert create successfully',
         'token'=>$user->createToken("API TOKEN")->plainTextToken,
-        //for testing
-        'user'=>$user,
-        'expert'=>$expert,
-        //
     ],200);
     }
+    public function update(Request $request,$id){
+        if(!isset($request->cost)&&!isset($request->duration)&&!isset($request->from)&&!isset($request->to)&&!isset($request->day))
+        {
+            return response()->json([
+                "status"=>true,
+                "message"=>"wrong input "
+            ],404);
+        }
+
+        $expert=Expert::where("expert_id","=",$id)->first();
+        if(!isset($expert)){
+            return response()->json([
+                "status"=>false,
+                "message"=>"wronge Id"
+            ]);
+        }
+            if(isset($request->cost)){
+            $expert->cost=$request->cost;
+                $expert->save();
+        }
+            if(isset($request->duration)){
+        $expert->duration=$request->duration;
+        $expert->save();
+    }
+
+        if(isset($request->day)&&isset($request->from)&&isset($request->to)){
+            $worktime=Work_time::create([
+                'day'=>$request->day,
+                'to'=>$request->to,
+                'from'=>$request->from ,'expert_id'=>$expert->expert_id
+            ]);
+            $expert->save();
+        }
+        return response()->json([
+            "status"=>true,
+            "message"=>'modified successfully'],200);
+    }
+
+
 
     public function get()
     {
@@ -73,4 +106,5 @@ class ExpertController extends Controller
     {
         return Expert::filter(request(['type']))->get();
     }
+
 }

@@ -6,9 +6,6 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator ;
-use Throwable;
-
-use function Symfony\Component\String\b;
 
 class UserController extends Controller
 {
@@ -50,7 +47,6 @@ class UserController extends Controller
             'status'=> true,
             'message'=>'user create successfully',
             'token'=>$user->createToken("API TOKEN")->plainTextToken,
-            'user'=>$user,
         ],200);
 
 

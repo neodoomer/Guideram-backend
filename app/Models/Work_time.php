@@ -13,4 +13,6 @@ class Work_time extends Model
     {
         return $this->belongsTo(Expert::class);
     }
+    protected $fillable=['day','from','to','expert_id'];
+    public $timestamps=false;
 }

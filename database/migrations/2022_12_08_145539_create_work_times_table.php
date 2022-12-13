@@ -20,7 +20,6 @@ return new class extends Migration
             $table->integer('day',false,true);
             $table->time('from');
             $table->time('to');
-            $table->timestamps();
         });
     }
 
