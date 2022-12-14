@@ -2,6 +2,7 @@
 namespace App\Http\Controllers;
 use App\Models\User;
 use App\Models\Expert;
+use App\Models\ExpertConsultationType;
 use App\Models\Work_time;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
@@ -60,10 +61,10 @@ class ExpertController extends Controller
 
 
     public function update(Request $request,$id){
-        if(!isset($request->cost)&&!isset($request->duration)&&!isset($request->from)&&!isset($request->to)&&!isset($request->day))
+        if(!isset($request->cost)&&!isset($request->duration)&&!isset($request->from)&&!isset($request->to)&&!isset($request->day)&&!isset($request->consultation_type_id))
         {
             return response()->json([
-                "status"=>true,
+                "status"=>false,
                 "message"=>"invalid input "
             ],404);
         }
@@ -71,16 +72,16 @@ class ExpertController extends Controller
         if(!isset($expert)){
             return response()->json([
                 "status"=>false,
-                "message"=>"wronge Id"
+                "message"=>"invaild Id"
             ]);
         }
             if(isset($request->cost)){
             $expert->cost=$request->cost;
-                $expert->save();
+
         }
             if(isset($request->duration)){
         $expert->duration=$request->duration;
-        $expert->save();
+
     }
         if(isset($request->day)&&isset($request->from)&&isset($request->to)){
             $worktimesForUser=Work_time::where("expert_id","=",$id)->get();
@@ -101,12 +102,18 @@ class ExpertController extends Controller
                 'to'=>$request->to,
                 'from'=>$request->from ,'expert_id'=>$expert->expert_id
             ]);
-            $expert->save();
+
         }
+        if(isset($request->consultation_type_id)){
+            $expert->expert_consultation_type()->attach([
+                'consultation_type_id'=>$request->consultation_type_id,
+                'expert_id'=>$expert->expert_id ,
+            ]);
+        }
+        $expert->save();
         return response()->json([
             "status"=>true,
-            "message"=>'modified successfully',
-            "worktimesForUser"=>$worktimesForUser],200);
+            "message"=>'modified successfully'],200);
     }
 
 

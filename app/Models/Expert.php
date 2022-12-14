@@ -1,6 +1,8 @@
 <?php
 
 namespace App\Models;
+
+use App\Http\Controllers\ConsultationTypeController;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -30,8 +32,9 @@ class Expert extends Model
     }
     public function expert_consultation_type()
     {
-        return $this->hasMany(ExpertConsultationType::class);
+        return $this->belongsToMany(Consultation_type::class, 'expert_consultation_types', 'expert_id', 'consultation_type_id');
     }
+
     protected $fillable=['expert_id','experience','phone','address','cost','duration',];
     public $timestamps=false;
     public function scopeFilter($query,array $filters)
@@ -45,4 +48,6 @@ class Expert extends Model
             ->where('type','like',request('type'));
         }
     }
+
+
 }
