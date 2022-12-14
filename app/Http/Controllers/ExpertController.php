@@ -12,8 +12,7 @@ use Illuminate\Support\Facades\Validator;
 class ExpertController extends Controller
 {
 
-    public function create(Request $request)
-    {
+    public function create(Request $request) {
 
         $validateUser=Validator::make($request->all(),
         [
@@ -24,6 +23,7 @@ class ExpertController extends Controller
             'password'=>'required',
             'address'=>'required',
             'phone'=>'required',
+            'experience'=>"required"
         ]
     );
     if($validateUser->fails() || !$request->is_expert){
@@ -47,6 +47,7 @@ class ExpertController extends Controller
         'expert_id'=>$user->user_id,
         "phone"=>$request->phone,
         "address"=>$request->address,
+        'experience'=>$request->experience
     ]);
     return response()->json([
         'status'=> true,
@@ -54,15 +55,18 @@ class ExpertController extends Controller
         'token'=>$user->createToken("API TOKEN")->plainTextToken,
     ],200);
     }
+
+
+
+
     public function update(Request $request,$id){
         if(!isset($request->cost)&&!isset($request->duration)&&!isset($request->from)&&!isset($request->to)&&!isset($request->day))
         {
             return response()->json([
                 "status"=>true,
-                "message"=>"wrong input "
+                "message"=>"invalid input "
             ],404);
         }
-
         $expert=Expert::where("expert_id","=",$id)->first();
         if(!isset($expert)){
             return response()->json([
@@ -78,8 +82,20 @@ class ExpertController extends Controller
         $expert->duration=$request->duration;
         $expert->save();
     }
-
         if(isset($request->day)&&isset($request->from)&&isset($request->to)){
+            $worktimesForUser=Work_time::where("expert_id","=",$id)->get();
+
+            //check if the time crossed or reapeted
+             foreach($worktimesForUser as $time){
+                if($request->day==$time->day){
+                    if(($request->from-$time->from >=0&&$request->to-$time->to <=0)||($request->from-$time->from <=0&&$request->to-$time->to >=0)){
+                        return response()->json([
+                            "status"=>false,
+                            "message"=>"The Time Is Crossed With Another One Or Repeated"
+                        ],404);
+                    }
+                    }
+             }
             $worktime=Work_time::create([
                 'day'=>$request->day,
                 'to'=>$request->to,
@@ -89,8 +105,13 @@ class ExpertController extends Controller
         }
         return response()->json([
             "status"=>true,
-            "message"=>'modified successfully'],200);
+            "message"=>'modified successfully',
+            "worktimesForUser"=>$worktimesForUser],200);
     }
+
+
+
+
 
 
 

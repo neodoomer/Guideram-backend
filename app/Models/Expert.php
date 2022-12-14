@@ -24,10 +24,6 @@ class Expert extends Model
     {
         return $this->hasMany(Favoriting::class);
     }
-    public function experience()
-    {
-        return $this->hasMany(Experience::class);
-    }
     public function work_time()
     {
         return $this->hasMany(Work_time::class);
@@ -36,7 +32,7 @@ class Expert extends Model
     {
         return $this->hasMany(ExpertConsultationType::class);
     }
-    protected $fillable=['expert_id','phone','address','cost','duration'];
+    protected $fillable=['expert_id','experience','phone','address','cost','duration',];
     public $timestamps=false;
     public function scopeFilter($query,array $filters)
     {

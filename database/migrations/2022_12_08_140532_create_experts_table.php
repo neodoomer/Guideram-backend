@@ -17,6 +17,7 @@ return new class extends Migration
             $table->unsignedBigInteger('expert_id');
             $table->foreign('expert_id')->references('user_id')->on('users');
             $table->string('phone',55);
+            $table->text('experience');
             $table->string('address',255);
             $table->float('rate')->default(0.0);
             $table->integer('rate_count',false,true)->default(0);

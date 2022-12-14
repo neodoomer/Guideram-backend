@@ -17,5 +17,7 @@ class ExpertConsultationType extends Model
     {
         return $this->belongsTo(ExpertConsultationType::class);
     }
+    protected $fillable=['expert_id','consultation_type_id'];
+    public $timestamps=false;
 
 }
