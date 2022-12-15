@@ -4,11 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\Pivot;
 
-class ExpertConsultationType extends Model
+class ExpertConsultationType extends Pivot
 {
     use HasFactory;
-    protected $primaryKey=['expert_id','consultation_type_id'];
+    protected $table = 'expert_consultation_types';
     public function expert()
     {
         return $this->belongsTo(Expert::class);

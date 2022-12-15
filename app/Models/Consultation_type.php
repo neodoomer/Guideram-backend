@@ -9,8 +9,6 @@ class Consultation_type extends Model
 {
     use HasFactory;
     protected $primaryKey='consultation_type_id';
-    public function expert_consultation_type()
-    {
-        return $this->hasMany(ExpertConsultationType::class);
-    }
+
+
 }

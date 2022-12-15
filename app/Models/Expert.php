@@ -28,11 +28,11 @@ class Expert extends Model
     }
     public function work_time()
     {
-        return $this->hasMany(Work_time::class);
+        return $this->hasMany(Work_time::class,"expert_id","expert_id");
     }
     public function expert_consultation_type()
     {
-        return $this->belongsToMany(Consultation_type::class, 'expert_consultation_types', 'expert_id', 'consultation_type_id');
+        return $this->belongsToMany(Consultation_type::class,'expert_consultation_types', 'expert_id', 'consultation_type_id')->using(ExpertConsultationType::class);
     }
 
     protected $fillable=['expert_id','experience','phone','address','cost','duration',];

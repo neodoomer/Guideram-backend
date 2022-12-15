@@ -78,13 +78,14 @@ class ExpertController extends Controller
             if(isset($request->cost)){
             $expert->cost=$request->cost;
 
+            $expert->save();
         }
             if(isset($request->duration)){
         $expert->duration=$request->duration;
-
+        $expert->save();
     }
         if(isset($request->day)&&isset($request->from)&&isset($request->to)){
-            $worktimesForUser=Work_time::where("expert_id","=",$id)->get();
+            $worktimesForUser=$expert->work_time()->get();
 
             //check if the time crossed or reapeted
              foreach($worktimesForUser as $time){
@@ -96,6 +97,13 @@ class ExpertController extends Controller
                         ],404);
                     }
                     }
+                    if($request->from>$request->to){
+                        return response()->json([
+                            "status"=>false,
+                            "message"=>"The Time Is Crossed With Another One Or Repeated",
+                            "worktimesForUser"=>$worktimesForUser
+                        ],404);
+                    }
              }
             $worktime=Work_time::create([
                 'day'=>$request->day,
@@ -105,12 +113,20 @@ class ExpertController extends Controller
 
         }
         if(isset($request->consultation_type_id)){
+            $expert_types=ExpertConsultationType::where("expert_id","=",$expert->expert_id)->get();
+            foreach($expert_types as $type){
+                if($type->expert_id===$expert->expert_id&&$type->consultation_type_id=== $request->consultation_type_id)
+                {return response()->json([
+                    "status"=>false,
+                    "message"=>"the expert type has already been set"
+                ]);
+                }
+            }
             $expert->expert_consultation_type()->attach([
                 'consultation_type_id'=>$request->consultation_type_id,
-                'expert_id'=>$expert->expert_id ,
             ]);
         }
-        $expert->save();
+
         return response()->json([
             "status"=>true,
             "message"=>'modified successfully'],200);

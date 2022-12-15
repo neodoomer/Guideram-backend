@@ -18,8 +18,6 @@ return new class extends Migration
             $table->foreign('expert_id')->references('expert_id')->on('experts');
             $table->unsignedBigInteger('consultation_type_id');
             $table->foreign('consultation_type_id')->references('consultation_type_id')->on('consultation_types');
-
-            $table->timestamps();
         });
     }
 
