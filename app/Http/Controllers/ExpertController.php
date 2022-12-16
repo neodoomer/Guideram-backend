@@ -133,7 +133,22 @@ class ExpertController extends Controller
     }
 
 
-
+    public function profile($id){
+        $expert=Expert::where("expert_id","=",$id)->first();
+        if(!isset($expert)){
+            return response()->json([
+                "status"=>false,
+                "message"=>"Expert Not Found ",
+            ]);
+        }
+        $user=$expert->user;
+        $data= array_merge($user->toArray(),$expert->toArray());
+        return response()->json([
+            "status"=>true,
+            "message"=>"Expert Found successfully",
+            "data"=>$data,
+        ]);
+    }
 
 
 

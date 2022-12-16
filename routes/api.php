@@ -29,6 +29,8 @@ Route::post('/login',[UserController::class,'login']);
 
 Route::get('/logout',[UserController::class,'logout'])->middleware('auth:sanctum');
 
+Route::get('/expert/{id}',[ExpertController::class,'profile'])->middleware('auth:sanctum');
+
 Route::put('/expert/{id}',[ExpertController::class,'update'])->middleware('auth:sanctum');
 
 Route::get('/experts',[ExpertController::class,'index']);

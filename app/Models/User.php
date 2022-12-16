@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
@@ -13,7 +12,7 @@ class User extends Authenticatable
     protected $primaryKey='user_id';
     public function expert()
     {
-        return $this->hasOne(Expert::class);
+        return $this->hasOne(Expert::class,"expert_id","user_id");
     }
     public function consultation()
     {

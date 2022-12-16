@@ -12,7 +12,7 @@ class Expert extends Model
     protected $primaryKey='expert_id';
     public function user()
     {
-        return $this->belongsTo(User::class );
+        return $this->belongsTo(User::class,"expert_id","user_id");
     }
     public function consultation()
     {
