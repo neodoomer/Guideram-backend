@@ -9,10 +9,11 @@ use Illuminate\Database\Eloquent\Relations\Pivot;
 class ExpertConsultationType extends Pivot
 {
     use HasFactory;
+
     protected $table = 'expert_consultation_types';
     public function expert()
     {
-        return $this->belongsTo(Expert::class);
+        return $this->belongsToMany(Expert::class);
     }
     public function expert_consultation_type()
     {

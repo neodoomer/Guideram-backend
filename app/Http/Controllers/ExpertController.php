@@ -122,7 +122,7 @@ class ExpertController extends Controller
                 ]);
                 }
             }
-            $expert->expert_consultation_type()->attach([
+            $expert->expert_consultation_types()->attach([
                 'consultation_type_id'=>$request->consultation_type_id,
             ]);
         }
@@ -141,29 +141,36 @@ class ExpertController extends Controller
                 "message"=>"Expert Not Found ",
             ]);
         }
-        $user=$expert->user;
-        $data= array_merge($user->toArray(),$expert->toArray());
+        $user=$expert->join('users',"users.user_id","=","user_id")->where("expert_id","=",$expert->expert_id)->with("expert_consultation_types","work_time")->first();
+
         return response()->json([
             "status"=>true,
             "message"=>"Expert Found successfully",
-            "data"=>$data,
+            "data"=>$user,
         ]);
     }
 
 
 
 
-    public function get()
+    public function list_by_type($type)
     {
-        return DB::table('experts')
-        ->join('users','user_id','=','expert_id')
-        ->select('users.*','experts.*')
-        ->where('user_id' , '=' ,request()->id)
-        ->get();
+        $data=User::join('experts',"experts.expert_id","=","user_id")
+        ->join('expert_consultation_types','expert_consultation_types.expert_id','experts.expert_id')
+        ->join('consultation_types', 'consultation_types.consultation_type_id', '=', 'expert_consultation_types.consultation_type_id')->select('users.*','experts.*')
+        ->where('type','like',$type)->get();
+        return  response()->json([
+            "status"=>true,
+            "data"=>$data
+        ],200);
     }
     public function index()
     {
-        return Expert::filter(request(['type']))->get();
+        $data=Expert::join('users',"users.user_id","=","expert_id")->with("expert_consultation_types")->get();
+    return response()->json([
+        "status"=>true,
+        "data"=>$data
+    ]);
     }
 
 }

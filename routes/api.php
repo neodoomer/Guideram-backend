@@ -35,4 +35,7 @@ Route::put('/expert/{id}',[ExpertController::class,'update'])->middleware('auth:
 
 Route::get('/experts',[ExpertController::class,'index']);
 
+Route::get('/experts/{type}',[ExpertController::class,'list_by_type']);
+
+
 Route::get('/experts/{id}',[ExpertController::class,'get']);
