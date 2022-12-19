@@ -19,8 +19,8 @@ return new class extends Migration
             $table->foreign('user_id')->references('user_id')->on('users');
             $table->unsignedBigInteger('expert_id');
             $table->foreign('expert_id')->references('expert_id')->on('experts');
-            $table->dateTime('start');
-            $table->dateTime('end');
+            $table->tinyInteger('day');
+            $table->tinyInteger('from');
             $table->timestamps();
         });
     }

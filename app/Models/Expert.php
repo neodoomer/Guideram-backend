@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Http\Controllers\ConsultationTypeController;
+
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -16,7 +16,7 @@ class Expert extends Model
     }
     public function consultation()
     {
-        return $this->hasMany(Consultation::class);
+        return $this->belongsToMany(Consultation::class,"consultations","expert_id","user_id")->using(Consultation::class);
     }
     public function rating()
     {

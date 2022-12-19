@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ConsultationController;
 use App\Http\Controllers\ExpertController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
@@ -33,9 +34,14 @@ Route::get('/expert/{id}',[ExpertController::class,'profile'])->middleware('auth
 
 Route::put('/expert/{id}',[ExpertController::class,'update'])->middleware('auth:sanctum');
 
-Route::get('/experts',[ExpertController::class,'index']);
+Route::get('/experts',[ExpertController::class,'index'])->middleware('auth:sanctum');
 
-Route::get('/experts/{type}',[ExpertController::class,'list_by_type']);
+Route::get('/experts/{type}',[ExpertController::class,'list_by_type'])->middleware('auth:sanctum');
 
+Route::get('/experts/{id}',[ExpertController::class,'get'])->middleware('auth:sanctum');
 
-Route::get('/experts/{id}',[ExpertController::class,'get']);
+Route::get('/expert/free_time/{id}',[ConsultationController::class,'list_free'])->middleware('auth:sanctum');
+
+Route::post("/expert/booking/{id}",[ConsultationController::class,'booking'])->middleware('auth:sanctum');
+
+Route::get('/expert/appointments/{id}',[ConsultationController::class,'list_appointments'])->middleware('auth:sanctum');

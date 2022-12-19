@@ -17,4 +17,6 @@ class Consultation extends Model
     {
         return $this->belongsTo(Expert::class);
     }
+    protected $fillable=["user_id","expert_id","day","from"];
+    
 }

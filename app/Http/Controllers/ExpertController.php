@@ -2,11 +2,9 @@
 namespace App\Http\Controllers;
 use App\Models\User;
 use App\Models\Expert;
-use App\Models\ExpertConsultationType;
 use App\Models\Work_time;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
@@ -113,16 +111,17 @@ class ExpertController extends Controller
 
         }
         if(isset($request->consultation_type_id)){
-            $expert_types=ExpertConsultationType::where("expert_id","=",$expert->expert_id)->get();
-            foreach($expert_types as $type){
-                if($type->expert_id===$expert->expert_id&&$type->consultation_type_id=== $request->consultation_type_id)
-                {return response()->json([
-                    "status"=>false,
-                    "message"=>"the expert type has already been set"
-                ]);
-                }
-            }
-            $expert->expert_consultation_types()->attach([
+            //not for use
+            // $expert_types=ExpertConsultationType::where("expert_id","=",$expert->expert_id)->get();
+            // foreach($expert_types as $type){
+            //     if($type->expert_id===$expert->expert_id&&$type->consultation_type_id=== $request->consultation_type_id)
+            //     {return response()->json([
+            //         "status"=>false,
+            //         "message"=>"the expert type has already been set"
+            //     ]);
+            //     }
+            // }
+            $expert->expert_consultation_types()->syncWithoutDetaching([
                 'consultation_type_id'=>$request->consultation_type_id,
             ]);
         }
@@ -167,10 +166,10 @@ class ExpertController extends Controller
     public function index()
     {
         $data=Expert::join('users',"users.user_id","=","expert_id")->with("expert_consultation_types")->get();
-    return response()->json([
-        "status"=>true,
-        "data"=>$data
-    ]);
+        return response()->json([
+            "status"=>true,
+            "data"=>$data
+        ]);
     }
 
 }
