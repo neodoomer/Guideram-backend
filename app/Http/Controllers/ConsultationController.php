@@ -10,11 +10,21 @@ use Illuminate\Routing\Controller;
 
 class ConsultationController extends Controller
 {
-    private function time_cutter($from,$to,$duration,$day){
+    private function time_cutter($from,$to,$duration,$expertConsultaions,$day){
         $res = [];
-        while($to>$from) {
+        while($to-$duration>$from) {
+            $is_taken=false;
+            //logic for checking if the time is already taken
+            foreach($expertConsultaions as $consult){
+                if($consult->day==$day&&$consult->from==$from+$duration){
+                    $is_taken=true;
+                    break;
+                }
+            }
             $from = $from+$duration;
+            if(!$is_taken){
             array_push($res,$from);
+        }
         }
         return $res;
     }
@@ -34,6 +44,8 @@ class ConsultationController extends Controller
             ],404);
         }
         $expertWorkTime=Work_time::where("expert_id","=",$id)->get();
+
+        $expertConsultaions=Consultation::where("expert_id","=",$expert->expert_id)->get();
         //every obejce will be a day of cutted times
         $sut = [];
         $sun = [];
@@ -43,33 +55,31 @@ class ConsultationController extends Controller
         $ths = [];
         $fri = [];
 
-        $consultations=Consultation::where("expert_id","=",$expert->expert_id)->get();
         foreach($expertWorkTime as $workTimeItem) {
             switch($workTimeItem->day) {
                 case 1:
-                    array_push($sut,ConsultationController::time_cutter($workTimeItem->from,$workTimeItem->to,$expert->duration,1));
+                    array_push($sut,ConsultationController::time_cutter($workTimeItem->from,$workTimeItem->to,$expert->duration,$expertConsultaions,1,));
                     break;
                 case 2:
-                    array_push($sun,ConsultationController::time_cutter($workTimeItem->from,$workTimeItem->to,$expert->duration,2));
+                    array_push($sun,ConsultationController::time_cutter($workTimeItem->from,$workTimeItem->to,$expert->duration,$expertConsultaions,2));
                     break;
                 case 3:
-                    array_push($mon,ConsultationController::time_cutter($workTimeItem->from,$workTimeItem->to,$expert->duration,3));
+                    array_push($mon,ConsultationController::time_cutter($workTimeItem->from,$workTimeItem->to,$expert->duration,$expertConsultaions,3));
                     break;
                 case 4:
-                    array_push($tus,ConsultationController::time_cutter($workTimeItem->from,$workTimeItem->to,$expert->duration,4));
+                    array_push($tus,ConsultationController::time_cutter($workTimeItem->from,$workTimeItem->to,$expert->duration,$expertConsultaions,4));
                     break;
                 case 5:
-                    array_push($wed,ConsultationController::time_cutter($workTimeItem->from,$workTimeItem->to,$expert->duration,5));
+                    array_push($wed,ConsultationController::time_cutter($workTimeItem->from,$workTimeItem->to,$expert->duration,$expertConsultaions,5));
                     break;
                 case 6:
-                    array_push($ths,ConsultationController::time_cutter($workTimeItem->from,$workTimeItem->to,$expert->duration,6));
+                    array_push($ths,ConsultationController::time_cutter($workTimeItem->from,$workTimeItem->to,$expert->duration,$expertConsultaions,6));
                     break;
                 case 7:
-                    array_push($fri,ConsultationController::time_cutter($workTimeItem->from,$workTimeItem->to,$expert->duration,7));
+                    array_push($fri,ConsultationController::time_cutter($workTimeItem->from,$workTimeItem->to,$expert->duration,$expertConsultaions,7));
                     break;
             }
         }
-        $days = array_merge($sut,$sun,$mon,$tus,$wed,$ths,$fri);
         return response()->json([
             "sut"=>$sut,
             "sun"=>$sun,
