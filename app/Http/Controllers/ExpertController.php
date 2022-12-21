@@ -88,7 +88,7 @@ class ExpertController extends Controller
             //check if the time crossed or reapeted
              foreach($worktimesForUser as $time){
                 if($request->day==$time->day){
-                    if(($request->from-$time->from >=0&&$request->to-$time->to <=0)||($request->from-$time->from <=0&&$request->to-$time->to >=0)){
+                    if(!($time->from >= $request->to) && !($request->from >= $time->to)){
                         return response()->json([
                             "status"=>false,
                             "message"=>"The Time Is Crossed With Another One Or Repeated"
