@@ -24,13 +24,9 @@ class RatingController extends Controller
         "user_id" => $user->id,
         "rate"=>$request->rate
      ]);
-     $expert->rate_count++;
+     //$expert->rate_count++;
      $expertRates=Rating::where("expert_id",$expert->expert_id)->get();
-     $rates=0;
-     foreach($expertRates as $rate){
-        $rates+=$rate->rate;
-     }
-     $expert->rate=$rates/$expert->rate_count;
+     $expert->rate=($expert->rate*$expert->rate_count + $request->rate)/++$expert->rate_count;
      $expert->save();
      return response()->json([
         "message"=>"rated successfully",
