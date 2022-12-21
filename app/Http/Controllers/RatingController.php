@@ -19,6 +19,8 @@ class RatingController extends Controller
      if(!isset($expert)){
         return response()->json(["message" => "Invalid Expert ID"],404);
      }
+     if($expert->expert_id==$user->id)
+         return response()->json(["message" => "You Can't rate yourself"],404);
      Rating::create([
         "expert_id" => $expert->expert_id,
         "user_id" => $user->id,
