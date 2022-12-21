@@ -155,7 +155,7 @@ class ExpertController extends Controller
 
     private function time_cutter($from,$to,$duration,$expertConsultaions,$day){
         $res = [];
-        while($to-$duration>$from) {
+        while($to-$duration>=$from) {
             $is_taken=false;
             //logic for checking if the time is already taken
             foreach($expertConsultaions as $consult){
@@ -164,10 +164,10 @@ class ExpertController extends Controller
                     break;
                 }
             }
-            $from = $from+$duration;
             if(!$is_taken){
             array_push($res,$from);
         }
+        $from = $from+$duration;
         }
         return $res;
     }
