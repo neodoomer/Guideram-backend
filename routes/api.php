@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ConsultationController;
 use App\Http\Controllers\ExpertController;
+use App\Http\Controllers\RatingController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -45,3 +46,5 @@ Route::get('/expert/free_time/{id}',[ConsultationController::class,'list_free'])
 Route::post("/expert/booking/{id}",[ConsultationController::class,'booking'])->middleware('auth:sanctum');
 
 Route::get('/expert/appointments/{id}',[ConsultationController::class,'list_appointments'])->middleware('auth:sanctum');
+
+Route::post('/expert/rate/{id}',[RatingController::class,"create"])->middleware('auth:sanctum');

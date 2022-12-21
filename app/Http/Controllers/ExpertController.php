@@ -82,9 +82,9 @@ class ExpertController extends Controller
         $expert->duration=$request->duration;
         $expert->save();
     }
+
         if(isset($request->day)&&isset($request->from)&&isset($request->to)){
             $worktimesForUser=$expert->work_time()->get();
-
             //check if the time crossed or reapeted
              foreach($worktimesForUser as $time){
                 if($request->day==$time->day){
@@ -103,7 +103,8 @@ class ExpertController extends Controller
                         ],404);
                     }
              }
-            $worktime=Work_time::create([
+            $worktime=Work_time::
+            create([
                 'day'=>$request->day,
                 'to'=>$request->to,
                 'from'=>$request->from ,'expert_id'=>$expert->expert_id

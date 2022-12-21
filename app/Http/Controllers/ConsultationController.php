@@ -106,12 +106,23 @@ class ConsultationController extends Controller
                 "message"=>"you can't make reservaition on yourself"
             ],400);
         }
+        if(!isset($expert->cost)){
+            return response()->json([
+                "message"=>"you can't make a free reservaition you have to add cost of the sesstion"
+            ],400);
+        }
+        $expertUser=$expert->user;
+        $expertUser->wallet+=$expert->cost;
+        $user->wallet-=$expert->cost;
        $book= Consultation::create([
             "expert_id"=>$expert->expert_id,
             "user_id"=>$user->user_id,
             'day'=>$request->day,
             'from'=>$request->from
         ]);
+        $expertUser->save();
+        $user->save();
+
         return response()->json([
             "message"=>"booking success",
             "book"=>$book

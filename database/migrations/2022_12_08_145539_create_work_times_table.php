@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id('work_time_id');
             $table->unsignedBigInteger('expert_id');
             $table->foreign('expert_id')->references('expert_id')->on('experts');
-            $table->integer('day',false,true);
+            $table->tinyInteger('day',false,true);
             $table->tinyInteger('from');
             $table->tinyInteger('to');
         });

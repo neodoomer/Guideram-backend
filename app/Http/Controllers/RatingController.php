@@ -2,85 +2,38 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Expert;
 use App\Models\Rating;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 
 class RatingController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        //
-    }
+    public function create($id,Request $request){
+        $request->validate([
+            "rate"=>"required|integer|between:1,5"
+        ]);
+     $expert=Expert::where("expert_id",$id)->first();
+     $user=Auth()->user();
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Rating  $rating
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Rating $rating)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Rating  $rating
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Rating $rating)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Rating  $rating
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Rating $rating)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Rating  $rating
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Rating $rating)
-    {
-        //
+     if(!isset($expert)){
+        return response()->json(["message" => "Invalid Expert ID"],404);
+     }
+     Rating::create([
+        "expert_id" => $expert->expert_id,
+        "user_id" => $user->id,
+        "rate"=>$request->rate
+     ]);
+     $expert->rate_count++;
+     $expertRates=Rating::where("expert_id",$expert->expert_id)->get();
+     $rates=0;
+     foreach($expertRates as $rate){
+        $rates+=$rate->rate;
+     }
+     $expert->rate=$rates/$expert->rate_count;
+     $expert->save();
+     return response()->json([
+        "message"=>"rated successfully",
+     ],200);
     }
 }

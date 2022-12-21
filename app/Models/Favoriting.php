@@ -17,4 +17,5 @@ class Favoriting extends Model
     {
         return $this->belongsTo(Expert::class);
     }
+    protected $fillable=["user_id","expert_id"];
 }
