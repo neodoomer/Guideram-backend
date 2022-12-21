@@ -47,13 +47,11 @@ class Expert extends Model
             ->select('users.*','experts.*')
             ->where('type','like',request('type'));
         }
-        if($filters['type'] ?? false){
+        if($filters['search'] ?? false){
             $query
-            ->join('users','user_id','=','expert_id')
-            ->join('expert_consultation_types','expert_consultation_types.expert_id','experts.expert_id')
-            ->join('consultation_types', 'consultation_types.consultation_type_id', '=', 'expert_consultation_types.consultation_type_id')
-            ->select('users.*','experts.*')
-            ->where('type','like',request('type'));
+           ->join('users','user_id','=','expert_id')
+           ->where('name','like','%',request('search'),'%')
+           ->orWhere('experience','like','%',request('search'),'%');
         }
     }
 
