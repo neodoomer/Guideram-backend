@@ -22,7 +22,8 @@ class ExpertController extends Controller
             'password'=>'required',
             'address'=>'required',
             'phone'=>'required',
-            'experience'=>"required"
+            'experience'=>"required",
+            "expert_consultation_type"=>"required|integer|between:1,5"
         ]
     );
     if($validateUser->fails() || !$request->is_expert){
@@ -48,10 +49,14 @@ class ExpertController extends Controller
         "address"=>$request->address,
         'experience'=>$request->experience
     ]);
+    $expert->expert_consultation_types()->syncWithoutDetaching([
+     'consultation_type_id'=>$request->consultation_type_id,
+    ]);
     return response()->json([
         'status'=> true,
         'message'=>'Expert create successfully',
         'token'=>$user->createToken("API TOKEN")->plainTextToken,
+        
     ],200);
     }
 
