@@ -52,6 +52,7 @@ class ExpertController extends Controller
         'status'=> true,
         'message'=>'Expert create successfully',
         'token'=>$user->createToken("API TOKEN")->plainTextToken,
+        'user_id'=>$user->user_id
     ],200);
     }
 
@@ -102,6 +103,12 @@ class ExpertController extends Controller
                             "worktimesForUser"=>$worktimesForUser
                         ],404);
                     }
+                    if($request->from >24 || $request->to>24)
+                    return response()->json([
+                        "status"=>false,
+                        "message"=>"invalid input",
+                        "worktimesForUser"=>$worktimesForUser
+                    ],404);
              }
             $worktime=Work_time::
             create([
@@ -112,16 +119,6 @@ class ExpertController extends Controller
 
         }
         if(isset($request->consultation_type_id)){
-            //not for use
-            // $expert_types=ExpertConsultationType::where("expert_id","=",$expert->expert_id)->get();
-            // foreach($expert_types as $type){
-            //     if($type->expert_id===$expert->expert_id&&$type->consultation_type_id=== $request->consultation_type_id)
-            //     {return response()->json([
-            //         "status"=>false,
-            //         "message"=>"the expert type has already been set"
-            //     ]);
-            //     }
-            // }
             $expert->expert_consultation_types()->syncWithoutDetaching([
                 'consultation_type_id'=>$request->consultation_type_id,
             ]);
