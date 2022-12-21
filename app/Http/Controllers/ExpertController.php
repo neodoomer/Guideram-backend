@@ -56,7 +56,7 @@ class ExpertController extends Controller
         'status'=> true,
         'message'=>'Expert create successfully',
         'token'=>$user->createToken("API TOKEN")->plainTextToken,
-        
+        'user_id'=>$user->user_id
     ],200);
     }
 
@@ -93,7 +93,7 @@ class ExpertController extends Controller
             //check if the time crossed or reapeted
              foreach($worktimesForUser as $time){
                 if($request->day==$time->day){
-                    if(($request->from-$time->from >=0&&$request->to-$time->to <=0)||($request->from-$time->from <=0&&$request->to-$time->to >=0)){
+                    if(!($time->from >= $request->to) && !($request->from >= $time->to)){
                         return response()->json([
                             "status"=>false,
                             "message"=>"The Time Is Crossed With Another One Or Repeated"
@@ -107,6 +107,12 @@ class ExpertController extends Controller
                             "worktimesForUser"=>$worktimesForUser
                         ],404);
                     }
+                    if($request->from >24 || $request->to>24)
+                    return response()->json([
+                        "status"=>false,
+                        "message"=>"invalid input",
+                        "worktimesForUser"=>$worktimesForUser
+                    ],404);
              }
             $worktime=Work_time::
             create([
@@ -117,16 +123,6 @@ class ExpertController extends Controller
 
         }
         if(isset($request->consultation_type_id)){
-            //not for use
-            // $expert_types=ExpertConsultationType::where("expert_id","=",$expert->expert_id)->get();
-            // foreach($expert_types as $type){
-            //     if($type->expert_id===$expert->expert_id&&$type->consultation_type_id=== $request->consultation_type_id)
-            //     {return response()->json([
-            //         "status"=>false,
-            //         "message"=>"the expert type has already been set"
-            //     ]);
-            //     }
-            // }
             $expert->expert_consultation_types()->syncWithoutDetaching([
                 'consultation_type_id'=>$request->consultation_type_id,
             ]);

@@ -47,6 +47,7 @@ class UserController extends Controller
             'status'=> true,
             'message'=>'user create successfully',
             'token'=>$user->createToken("API TOKEN")->plainTextToken,
+            'user_id'=>$user->user_id
         ],200);
 
 
@@ -68,7 +69,8 @@ class UserController extends Controller
         return response()->json([
             'status'=> true,
             'message'=>'User login successfully.',
-            'token'=>$user->createToken('API TOKEN')->plainTextToken
+            'token'=>$user->createToken('API TOKEN')->plainTextToken,
+            'user_id'=>$user->user_id
         ],200);
     }
     public function logout()
