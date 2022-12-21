@@ -22,18 +22,22 @@ class ConsultationController extends Controller
         ]);
         if($expert->expert_id==$user->user_id){
             return response()->json([
-                "message"=>"you can't make reservaition on yourself"
+                "message"=>"you can't make reservation on yourself"
             ],400);
         }
         if(!isset($expert->cost)){
             return response()->json([
-                "message"=>"you can't make a free reservaition you have to add cost of the sesstion"
+                "message"=>"You Can't book a reservation, this expert hasn't put a cost yet"
             ],400);
         }
+        if($user->wallet<$expert->cost)
+            return response()->json([
+                "message"=>"you don't have enough money in your wallet , you need to charge it "
+            ],400);
         $expertUser=$expert->user;
         $expertUser->wallet+=$expert->cost;
         $user->wallet-=$expert->cost;
-       $book= Consultation::create([
+        $book= Consultation::create([
             "expert_id"=>$expert->expert_id,
             "user_id"=>$user->user_id,
             'day'=>$request->day,
