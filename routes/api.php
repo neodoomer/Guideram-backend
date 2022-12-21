@@ -41,7 +41,7 @@ Route::get('/experts/{type}',[ExpertController::class,'list_by_type'])->middlewa
 
 Route::get('/experts/{id}',[ExpertController::class,'get'])->middleware('auth:sanctum');
 
-Route::get('/expert/free_time/{id}',[ConsultationController::class,'list_free'])->middleware('auth:sanctum');
+Route::get('/expert/free_time/{id}',[ExpertController::class,'list_free'])->middleware('auth:sanctum');
 
 Route::post("/expert/booking/{id}",[ConsultationController::class,'booking'])->middleware('auth:sanctum');
 
