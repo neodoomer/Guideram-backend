@@ -185,7 +185,7 @@ class ExpertController extends Controller
     }
     public function index()
     {
-        $data=Expert::join('users',"users.user_id","=","expert_id")->with("expert_consultation_types")->get();
+        $data=Expert::join('users',"users.user_id","=","expert_id")->with("expert_consultation_types")->filter(request(['type','search']))->get();
         return response()->json([
             "status"=>true,
             "data"=>$data
