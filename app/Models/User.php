@@ -20,11 +20,11 @@ class User extends Authenticatable
     }
     public function rating()
     {
-        return $this->hasMany(Rating::class);
+        return $this->belongsToMany(Expert::class, 'ratings', 'user_id', 'expert_id')->withTimestamps();
     }
     public function favoriting()
     {
-        return $this->hasMany(Favoriting::class);
+        return $this->belongsToMany(Expert::class, 'favoritings', 'user_id', 'expert_id')->withTimestamps();
     }
 
     //configes

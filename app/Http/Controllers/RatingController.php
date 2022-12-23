@@ -15,17 +15,19 @@ class RatingController extends Controller
         ]);
      $expert=Expert::where("expert_id",$id)->first();
      $user=Auth()->user();
-
      if(!isset($expert)){
         return response()->json(["message" => "Invalid Expert ID"],404);
      }
      if($expert->expert_id==$user->id)
          return response()->json(["message" => "You Can't rate yourself"],404);
-     Rating::create([
+
+        $user->rating()->syncWithoutDetaching([$user->user_id => 
+    [
         "expert_id" => $expert->expert_id,
-        "user_id" => $user->id,
         "rate"=>$request->rate
-     ]);
+    ]
+    ]);
+
      //$expert->rate_count++;
      $expertRates=Rating::where("expert_id",$expert->expert_id)->get();
      $expert->rate=($expert->rate*$expert->rate_count + $request->rate)/++$expert->rate_count;

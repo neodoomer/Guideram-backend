@@ -14,7 +14,7 @@ class FavoritingController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function addToFavourite(request $request,$id)
+    public function addToFavourite($id)
     {
         $expert=Expert::where("expert_id",$id)->first();
         $user=Auth()->user();
@@ -24,10 +24,11 @@ class FavoritingController extends Controller
         }
         if($expert->expert_id==$user->id)
          return response()->json(["message" => "You Can't Add yourself to the Favourites"],404);
-        Favoriting::create([
-            "expert_id" => $expert->expert_id,
-             "user_id" => $user->id
-        ]);
+         $user->favoriting()->syncWithoutDetaching([$user->user_id => 
+         [
+             "expert_id" => $expert->expert_id
+         ]
+         ]);
         return response()->json([
             "message"=>"Added to favorites successfully",
          ],200);
