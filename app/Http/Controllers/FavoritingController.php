@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Expert;
 use App\Models\Favoriting;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
@@ -13,74 +14,23 @@ class FavoritingController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function addToFavourite($id)
     {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Favoriting  $favoriting
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Favoriting $favoriting)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Favoriting  $favoriting
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Favoriting $favoriting)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Favoriting  $favoriting
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Favoriting $favoriting)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Favoriting  $favoriting
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Favoriting $favoriting)
-    {
-        //
+        $expert=Expert::where("expert_id",$id)->first();
+        $user=Auth()->user();
+   
+        if(!isset($expert)){
+           return response()->json(["message" => "Invalid Expert ID"],404);
+        }
+        if($expert->expert_id==$user->id)
+         return response()->json(["message" => "You Can't Add yourself to the Favourites"],404);
+         $user->favoriting()->syncWithoutDetaching([$user->user_id => 
+         [
+             "expert_id" => $expert->expert_id
+         ]
+         ]);
+        return response()->json([
+            "message"=>"Added to favorites successfully",
+         ],200);
     }
 }
