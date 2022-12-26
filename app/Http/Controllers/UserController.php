@@ -34,7 +34,7 @@ class UserController extends Controller
             ],401);
         }
         //check if there is a photo
-        $photoPath=$request->file('photo')?$request->file('photo')->store('public/images'):null;
+        $photoPath=$request->file('photo')?$request->file('photo')->store('images','public'):null;
         //creating user if succssed
         $user=User::create([
             'name'=>$request->name,

@@ -8,7 +8,8 @@ use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
-class ExpertController extends Controller
+class
+ExpertController extends Controller
 {
 
     public function create(Request $request) {
@@ -23,7 +24,7 @@ class ExpertController extends Controller
             'address'=>'required',
             'phone'=>'required',
             'experience'=>"required",
-            "expert_consultation_type"=>"required|integer|between:1,5"
+            // "expert_consultation_type"=>"required|integer|between:1,5"
         ]
     );
     if($validateUser->fails() || !$request->is_expert){
@@ -49,9 +50,9 @@ class ExpertController extends Controller
         "address"=>$request->address,
         'experience'=>$request->experience
     ]);
-    $expert->expert_consultation_types()->syncWithoutDetaching([
-     'consultation_type_id'=>$request->consultation_type_id,
-    ]);
+    // $expert->expert_consultation_types()->syncWithoutDetaching([
+    //  'consultation_type_id'=>$request->consultation_type_id,
+    // ]);
     return response()->json([
         'status'=> true,
         'message'=>'Expert create successfully',
