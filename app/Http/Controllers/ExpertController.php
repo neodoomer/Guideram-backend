@@ -8,7 +8,6 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
-use App\Http\Controllers\ConsultationController;
 
 class
 ExpertController extends Controller
@@ -36,7 +35,8 @@ ExpertController extends Controller
         ],401);
     }
     //check if there is a photo
-    $photoPath=$request->file('photo')?$request->file('photo')->store('public/images'):null;
+    $photoPath=$request->file('photo')?$request->file('photo')->store('images','public'):"";
+
     //creating user if succssed
     $user=User::create([
         'name'=>$request->name,
@@ -137,17 +137,15 @@ ExpertController extends Controller
         $expert=Expert::where("expert_id","=",$id)->first();
         if(!isset($expert)){
             return response()->json([
-                "status"=>false,
                 "message"=>"Expert Not Found ",
-            ]);
+            ],404);
         }
         $user=$expert->join('users',"users.user_id","=","user_id")->where("expert_id","=",$expert->expert_id)->with("expert_consultation_types","work_time")->first();
 
         return response()->json([
-            "status"=>true,
             "message"=>"Expert Found successfully",
             "data"=>$user,
-        ]);
+        ],200);
     }
 
     private function time_cutter($from,$to,$duration,$expertConsultaions,$day){
@@ -176,7 +174,6 @@ ExpertController extends Controller
         ->join('consultation_types', 'consultation_types.consultation_type_id', '=', 'expert_consultation_types.consultation_type_id')->select('users.*','experts.*')
         ->where('type','like',$type)->get();
         return  response()->json([
-            "status"=>true,
             "data"=>$data
         ],200);
     }
@@ -184,9 +181,8 @@ ExpertController extends Controller
     {
         $data=Expert::join('users',"users.user_id","=","expert_id")->with("expert_consultation_types")->filter(request(['type','search']))->get();
         return response()->json([
-            "status"=>true,
             "data"=>$data
-        ]);
+        ],200);
     }
     public function list_free($id) {
         $expert=Expert::where("expert_id","=",$id)->first();

@@ -32,7 +32,7 @@ class DatabaseSeeder extends Seeder
             'type' => 'Familial'
         ]);
         DB::table('consultation_types')->insert([
-            'type' => 'Buisiness'
+            'type' => 'Business'
         ]);
     }
 }
