@@ -28,7 +28,6 @@ class UserController extends Controller
         );
         if($validateUser->fails()){
             return response()->json([
-                'status'=> false,
                 'message'=>'validation erorr',
                 'errors'=>$validateUser->errors()
             ],401);
@@ -44,10 +43,11 @@ class UserController extends Controller
             'isExpert'=>$request->isExpert
         ]);
         return response()->json([
-            'status'=> true,
             'message'=>'user create successfully',
             'token'=>$user->createToken("API TOKEN")->plainTextToken,
-            'user_id'=>$user->user_id
+            'user_id'=>$user->user_id,
+            "is_expert"=>false
+
         ],200);
 
 
@@ -65,12 +65,16 @@ class UserController extends Controller
 
             ],401);
         }
+        $is_expert=$user->is_expert==1?true:false;
 
         return response()->json([
             'status'=> true,
             'message'=>'User login successfully.',
             'token'=>$user->createToken('API TOKEN')->plainTextToken,
-            'user_id'=>$user->user_id
+            'user_id'=>$user->user_id,
+            "is_expert"=>$is_expert
+
+
         ],200);
     }
     public function logout()
