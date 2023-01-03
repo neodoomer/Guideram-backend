@@ -43,7 +43,7 @@ ExpertController extends Controller
         'email'=>$request->email,
         'photo'=>$photoPath,
         'password'=>Hash::make($request->password),
-        'is_expert'=> $request->is_expert,
+        'is_expert'=> true,
     ]);
     $expert=Expert::create([
         'expert_id'=>$user->user_id,
@@ -52,10 +52,10 @@ ExpertController extends Controller
         'experience'=>$request->experience
     ]);
     return response()->json([
-        'status'=> true,
         'message'=>'Expert create successfully',
         'token'=>$user->createToken("API TOKEN")->plainTextToken,
-        'user_id'=>$user->user_id
+        'user_id'=>$user->user_id,
+        "is_expert"=>true
     ],200);
     }
 
