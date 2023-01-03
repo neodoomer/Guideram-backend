@@ -5,17 +5,17 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Rating extends Model
+class Conversation extends Model
 {
     use HasFactory;
-    protected $primaryKey=['user_id','expert_id'];
+    protected $primaryKey='conversation_id';
     public function user()
     {
         return $this->hasOne(User::class);
     }
     public function expert()
     {
-        return $this->belongsTo(Expert::class);
+        return $this->hasOne(Expert::class);
     }
-    protected $fillable=["user_id","expert_id"];
+    protected $fillable=["conversation_id"];
 }

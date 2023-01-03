@@ -34,7 +34,10 @@ class Expert extends Model
     {
         return $this->belongsToMany(Consultation_type::class,'expert_consultation_types', 'expert_id', 'consultation_type_id')->using(ExpertConsultationType::class);
     }
-
+    public function conversation()
+    {
+        return $this->belongsToMany(Conversation::class);
+    }
     protected $fillable=['expert_id','experience','phone','address','cost','duration',];
     public $timestamps=false;
     public function scopeFilter($query)

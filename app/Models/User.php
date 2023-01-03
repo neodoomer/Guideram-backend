@@ -26,7 +26,10 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(Expert::class, 'favoritings', 'user_id', 'expert_id')->withTimestamps();
     }
-
+    public function conversation()
+    {
+        return $this->belongsToMany(Conversation::class);
+    }
     //configes
     protected $fillable=['name','email','password','photo','is_expert'];
     public $timestamps=false;
