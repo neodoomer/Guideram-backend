@@ -25,9 +25,10 @@ ExpertController extends Controller
             'address'=>'required',
             'phone'=>'required',
             'experience'=>"required",
+            "consultation_type_id"=>"required"
         ]
     );
-    if($validateUser->fails() || !$request->is_expert){
+    if($validateUser->fails() ){
         return response()->json([
             'status'=> false,
             'message'=>'validation erorr',
@@ -36,7 +37,6 @@ ExpertController extends Controller
     }
     //check if there is a photo
     $photoPath=$request->file('photo')?$request->file('photo')->store('images','public'):"";
-
     //creating user if succssed
     $user=User::create([
         'name'=>$request->name,
@@ -51,6 +51,14 @@ ExpertController extends Controller
         "address"=>$request->address,
         'experience'=>$request->experience
     ]);
+
+    // dd($user->expert);
+
+    $user->expert->expert_consultation_types()->syncWithoutDetaching(
+        [
+            'consultation_type_id'=>$request->consultation_type_id
+        ]
+    );
     return response()->json([
         'message'=>'Expert create successfully',
         'token'=>$user->createToken("API TOKEN")->plainTextToken,
@@ -122,9 +130,11 @@ ExpertController extends Controller
 
         }
         if(isset($request->consultation_type_id)){
+            foreach($request->consultation_type_id as $type){
             $expert->expert_consultation_types()->syncWithoutDetaching([
-                'consultation_type_id'=>$request->consultation_type_id,
+                'consultation_type_id'=>$type,
             ]);
+        }
         }
 
         return response()->json([
