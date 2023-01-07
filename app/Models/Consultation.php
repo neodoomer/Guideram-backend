@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Consultation extends Model
 {
     use HasFactory;
-    protected $primaryKey='consultation_id';
+    protected $primaryKey = 'consultation_id';
     public function user()
     {
         return $this->belongsTo(User::class);
@@ -17,6 +17,5 @@ class Consultation extends Model
     {
         return $this->belongsTo(Expert::class);
     }
-    protected $fillable=["user_id","expert_id","day","from"];
-    
+    protected $fillable = ["user_id", "expert_id", "day", "from"];
 }

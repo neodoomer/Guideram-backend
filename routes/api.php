@@ -5,7 +5,6 @@ use App\Http\Controllers\ExpertController;
 use App\Http\Controllers\FavoritingController;
 use App\Http\Controllers\RatingController;
 use App\Http\Controllers\UserController;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 /*
