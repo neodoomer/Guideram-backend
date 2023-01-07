@@ -38,7 +38,7 @@ class Expert extends Model
     {
         return $this->belongsToMany(Conversation::class);
     }
-    protected $fillable=['expert_id','experience','phone','address','cost','duration',];
+    protected $fillable=['expert_id','experience','phone','address','cost','duration'];
     public $timestamps=false;
     public function scopeFilter($query)
     {
@@ -52,9 +52,9 @@ class Expert extends Model
         }
         if($filters['search'] ?? false){
             $query
-           ->join('users','user_id','=','expert_id')
-           ->where('name','like','%',request('search'),'%')
-           ->orWhere('experience','like','%',request('search'),'%');
+            ->join('users','user_id','=','expert_id')
+            ->where('name','like','%',request('search'),'%')
+            ->orWhere('experience','like','%',request('search'),'%');
         }
     }
 
