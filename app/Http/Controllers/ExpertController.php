@@ -249,13 +249,13 @@ ExpertController extends Controller
             }
         }
         return response()->json([
-            "sut" =>  array_merge(...array_values($sut)),
             "sun" =>  array_merge(...array_values($sut)),
-            "mon" =>  array_merge(...array_values($mon)),
-            "tus" =>  array_merge(...array_values($tus)),
-            "wed" =>  array_merge(...array_values($wed)),
-            "ths" =>  array_merge(...array_values($ths)),
-            "fri" =>  array_merge(...array_values($fri))
+            "mon" =>  array_merge(...array_values($sun)),
+            "tus" =>  array_merge(...array_values($mon)),
+            "wed" =>  array_merge(...array_values($tus)),
+            "ths" =>  array_merge(...array_values($wed)),
+            "fri" =>  array_merge(...array_values($ths)),
+            "sut" =>  array_merge(...array_values($fri))
         ], 200);
     }
 }
