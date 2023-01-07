@@ -74,8 +74,8 @@ ExpertController extends Controller
         if(!isset($request->cost)&&!isset($request->duration)&&!isset($request->from)&&!isset($request->to)&&!isset($request->day)&&!isset($request->consultation_type_id))
         {
             return response()->json([
-                "status"=>false,
-                "message"=>"invalid input "
+                "message"=>"invalid input",
+                "request"=>$request
             ],404);
         }
         $expert=Expert::where("expert_id","=",$id)->first();
@@ -130,11 +130,10 @@ ExpertController extends Controller
 
         }
         if(isset($request->consultation_type_id)){
-            foreach($request->consultation_type_id as $type){
             $expert->expert_consultation_types()->syncWithoutDetaching([
-                'consultation_type_id'=>$type,
+                'consultation_type_id'=>$request->consultation_type_id,
             ]);
-        }
+
         }
 
         return response()->json([
@@ -150,8 +149,7 @@ ExpertController extends Controller
                 "message"=>"Expert Not Found ",
             ],404);
         }
-        $user=$expert->join('users',"users.user_id","=","user_id")->where("expert_id","=",$expert->expert_id)->with("expert_consultation_types","work_time")->first();
-
+        $user=$expert->join('users','user_id','=','expert_id')->where("expert_id","=",$id)->with("expert_consultation_types","work_time")->first();
         return response()->json([
             "message"=>"Expert Found successfully",
             "data"=>$user,

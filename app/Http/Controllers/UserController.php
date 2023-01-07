@@ -21,8 +21,7 @@ class UserController extends Controller
             [
                 'name'=>'required',
                 'email'=>'required|email|unique:users,email',
-                'photo'=>'image|mimes:jpg,png,jpeg,svg|max:2048',
-                'isExpert'=>'boolean',
+                'photo'=>'image|mimes:jpg,png,jpeg,svg|max:8048',
                 'password'=>'required'
             ]
         );
@@ -40,7 +39,7 @@ class UserController extends Controller
             'email'=>$request->email,
             'photo'=>$photoPath,
             'password'=>Hash::make($request->password),
-            'isExpert'=>$request->isExpert
+            'isExpert'=>false
         ]);
         return response()->json([
             'message'=>'user create successfully',
