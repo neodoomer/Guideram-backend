@@ -17,6 +17,7 @@ class ExpertFactory extends Factory
      */
     public function definition()
     {
+
         return [
             'expert_id'=> User::factory()->suspended(),
             'experience'=>$this->faker->paragraph(),

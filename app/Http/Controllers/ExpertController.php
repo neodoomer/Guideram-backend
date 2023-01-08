@@ -71,9 +71,6 @@ ExpertController extends Controller
         ], 200);
     }
 
-
-
-
     public function update(Request $request, $id)
     {
         if (!isset($request->cost) && !isset($request->duration) && !isset($request->from) && !isset($request->to) && !isset($request->day) && !isset($request->consultation_type_id)) {
@@ -212,7 +209,6 @@ ExpertController extends Controller
             ], 404);
         }
         $expertWorkTime = Work_time::where("expert_id", "=", $id)->get();
-
         $expertConsultaions = Consultation::where("expert_id", "=", $expert->expert_id)->get();
         //every obejce will be a day of cutted times
         $sut = [];

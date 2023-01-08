@@ -37,7 +37,12 @@ class ConsultationController extends Controller
         $expertUser = $expert->user;
         $expertUser->wallet += $expert->cost;
         $user->wallet -= $expert->cost;
-
+        $expertConsultaions = Consultation::where("expert_id", "=", $expert->expert_id)->get();
+        foreach($expertConsultaions as $cons)
+            if($cons['day']==$request->day && $cons['from']==$request->from)
+                return response()->json([
+                    "message" => "This time is not avaible"
+                ], 400);
         $book = Consultation::create([
             "expert_id" => $expert->expert_id,
             "user_id" => $user->user_id,

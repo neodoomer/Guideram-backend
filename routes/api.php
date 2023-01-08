@@ -47,6 +47,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/expert/rate/{id}',[RatingController::class,"create"]);
 
     Route::post("/expert/favourite/{id}",[FavoritingController::class,"addToFavourite"]);
+
+    Route::get('/expert/is_favourite/{id}',[FavoritingController::class,'is_favorite']);
 });
 
 

@@ -16,21 +16,44 @@ class FavoritingController extends Controller
      */
     public function addToFavourite($id)
     {
-        $expert=Expert::where("expert_id",$id)->first();
-        $user=Auth()->user();
-   
-        if(!isset($expert)){
-           return response()->json(["message" => "Invalid Expert ID"],404);
+        $expert = Expert::where("expert_id", $id)->first();
+        $user = Auth()->user();
+
+        if (!isset($expert)) {
+            return response()->json(["message" => "Invalid Expert ID"], 404);
         }
-        if($expert->expert_id==$user->id)
-         return response()->json(["message" => "You Can't Add yourself to the Favourites"],404);
-         $user->favoriting()->syncWithoutDetaching([$user->user_id => 
-         [
-             "expert_id" => $expert->expert_id
-         ]
-         ]);
+        if ($expert->expert_id == $user->id)
+            return response()->json(["message" => "You Can't Add yourself to the Favourites"], 404);
+        $user->favoriting()->syncWithoutDetaching([
+            $user->user_id =>
+            [
+                "expert_id" => $expert->expert_id
+            ]
+        ]);
         return response()->json([
-            "message"=>"Added to favorites successfully",
-         ],200);
+            "message" => "Added to favorites successfully",
+        ], 200);
+    }
+
+    public function is_favorite($id)
+    {
+        $expert = Expert::where("expert_id", $id)->first();
+        $user = Auth()->user();
+
+        if (!isset($expert)) {
+            return response()->json(["message" => "Invalid Expert ID"], 404);
+        }
+        $fav = Favoriting::where("expert_id", $id)
+            ->where("user_id", $user['user_id'])->first();
+
+        if (isset($fav))
+            return response()->json([
+                "data" => true,
+                "message" => "This Expert is in Your Favorite list <3"
+            ], 200);
+        return response()->json([
+            "data" => false,
+            "message" => "This Expert is not in Your Favorite list"
+        ], 200);
     }
 }
