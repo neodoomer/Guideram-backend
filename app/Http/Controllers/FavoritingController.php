@@ -56,4 +56,17 @@ class FavoritingController extends Controller
             "message" => "This Expert is not in Your Favorite list"
         ], 200);
     }
+    public function favorite_list()
+    {
+        $user=Auth()->user();
+        $data = Expert::join('users','experts.expert_id','users.user_id')
+                        ->join('favoritings','favoritings.expert_id','experts.expert_id')
+                        ->where('favoritings.user_id','=',$user['user_id'])
+                        ->select('experts.*','users.*')
+                        ->get();
+        return response()->json([
+            "data" => $data,
+            "message" => "Success"
+        ], 200);
+    }
 }

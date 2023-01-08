@@ -19,6 +19,7 @@ return new class extends Migration
             $table->unsignedBigInteger('expert_id');
             $table->foreign('expert_id')->references('expert_id')->on('experts');
             $table->float('rate',8,2,true);
+            $table->unique(['expert_id','user_id']);
             $table->timestamps();
         });
     }
