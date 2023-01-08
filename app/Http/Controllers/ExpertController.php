@@ -163,7 +163,7 @@ ExpertController extends Controller
             $is_taken = false;
             //logic for checking if the time is already taken
             foreach ($expertConsultaions as $consult) {
-                if ($consult->day == $day && $consult->from == $from + $duration) {
+                if ($consult->day == $day && $consult->from == $from) {
                     $is_taken = true;
                     break;
                 }
